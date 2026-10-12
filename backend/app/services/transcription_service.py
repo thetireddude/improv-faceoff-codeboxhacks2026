@@ -76,6 +76,12 @@ class DeepgramSession(TranscriptionSession):
             raise TranscriptionError("DEEPGRAM_API_KEY is not configured")
         Thread(target=self._run, daemon=True, name="deepgram-transcription").start()
 
+    @property
+    def is_connected(self) -> bool:
+        """Return whether the provider WebSocket has completed its handshake."""
+        with self._lock:
+            return self._connection is not None
+
     def send_audio(self, audio: bytes) -> None:
         with self._lock:
             connection = self._connection
