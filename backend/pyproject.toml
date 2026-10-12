@@ -1,5 +1,8 @@
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+    "live_api: contacts a configured third-party API; opt in with RUN_LIVE_API_TESTS=1",
+]
 
 [tool.ruff]
 line-length = 88

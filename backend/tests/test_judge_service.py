@@ -139,6 +139,17 @@ def test_retries_when_gemini_returns_an_invalid_result():
     assert len(service._client.models.calls) == 2
 
 
+def test_retries_a_transient_provider_error_before_returning_results():
+    service = _service(
+        [TimeoutError("provider timeout"), VALID_JUDGMENT], max_attempts=2
+    )
+
+    result = service.judge(_judge_input())
+
+    assert result.player_a.highlight
+    assert len(service._client.models.calls) == 2
+
+
 def test_reports_safe_finish_reason_when_structured_output_is_not_parsed(caplog):
     response = SimpleNamespace(
         parsed=None,
